@@ -15,8 +15,7 @@
     "moongoose": "^0.0.5",
     "next": "15.1.7",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "react-spring": "^9.7.5"
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
