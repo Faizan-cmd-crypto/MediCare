@@ -1,4 +1,5 @@
 import { Geist, Geist_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import {
   ClerkProvider,
 } from '@clerk/nextjs'
@@ -32,6 +33,7 @@ export default function RootLayout({ children }) {
           </header>
         <Navbar/>
         {children}
+        <Analytics />
         <Footer/>
       </body>
     </html>
