@@ -102,7 +102,7 @@ export default function DoctorsPage() {
                 </p>
                 <p className="text-gray-600 mb-2"><strong>Availability:</strong> {doctor.Availability || 'N/A'}</p>
                 <p className="text-gray-600 mb-2"><strong>Contact:</strong> {doctor.Contact}</p>
-                <p className="text-gray-600 mb-4"><strong>Fee:</strong> ${doctor.Consultation_Fee}</p>
+                <p className="text-gray-600 mb-4"><strong>Fee:</strong> ₹{doctor.Consultation_Fee}</p>
                 <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
                   Book Appointment
                 </button>
