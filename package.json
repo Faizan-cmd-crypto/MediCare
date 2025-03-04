@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^6.12.1",
+    "@vercel/analytics": "^1.5.0",
     "framer-motion": "^12.4.7",
     "mongoose": "^8.11.0",
     "next": "15.1.7",
