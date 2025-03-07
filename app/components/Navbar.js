@@ -5,9 +5,12 @@ import Link from 'next/link';
 import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 import Logo from "../../public/Logo2.jpg";
 import Image from 'next/image';
-import { motion, AnimatePresence } from 'framer-motion'; // Import Framer Motion components
+import { motion, AnimatePresence } from 'framer-motion';
+import { useState } from 'react'; // Import useState for menu toggle
 
 export default function Navbar() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // State for menu toggle
+
   return (
     <>
       <Head>
@@ -16,81 +19,79 @@ export default function Navbar() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
 
-      <motion.nav
-        initial={{ opacity: 0, y: -50 }} // Initial animation state
-        animate={{ opacity: 1, y: 0 }} // Final animation state
-        transition={{ duration: 0.5, ease: 'easeOut' }} // Animation transition
-        className="bg-green-500 text-white p-4 fixed top-0 left-0 right-0 z-50"
-      >
+      <nav className="bg-green-500 text-white p-4 fixed top-0 left-0 right-0 z-50">
         <div className="container mx-auto flex justify-between items-center">
-          <motion.div 
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="flex items-center"
-          >
+          <div className="flex items-center">
             <Image
               src={Logo}
-              alt=""
+              alt="MediCare Logo"
               width={35}
               height={30}
               className="mr-2 rounded-full"
               style={{ opacity: 1 }}
             />
-            <span className="text-xl font-bold">
-              MediCare
-            </span>
-          </motion.div>
+            <span className="text-xl font-bold">MediCare</span>
+          </div>
 
-          <motion.ul 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.4, staggerChildren: 0.1 }}
-            className="flex space-x-4"
+          {/* Hamburger Menu (Mobile) */}
+          <div className="md:hidden">
+            <button onClick={() => setIsMenuOpen(!isMenuOpen)}>
+              <svg
+                className="h-6 w-6 fill-current"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                {isMenuOpen ? (
+                  <path
+                    fillRule="evenodd"
+                    clipRule="evenodd"
+                    d="M18.278 16.864a1 1 0 0 1-1.414 1.414l-4.829-4.829-4.828 4.829a1 1 0 0 1-1.414-1.414l4.829-4.828-4.829-4.828a1 1 0 0 1 1.414-1.414l4.828 4.828 4.829-4.828a1 1 0 1 1 1.414 1.414l-4.828 4.829 4.828 4.829z"
+                  />
+                ) : (
+                  <path
+                    fillRule="evenodd"
+                    clipRule="evenodd"
+                    d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2z"
+                  />
+                )}
+              </svg>
+            </button>
+          </div>
+
+          {/* Navigation Links (Desktop) */}
+          <ul
+            className={`md:flex space-x-4 ${
+              isMenuOpen ? 'flex flex-col mt-4 md:mt-0' : 'hidden md:flex'
+            }`}
           >
-            <motion.li
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-            >
+            <li>
               <Link
                 href="/"
                 className="hover:text-teal-200 transition-colors duration-300"
               >
                 Home
               </Link>
-            </motion.li>
-            <motion.li
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-            >
+            </li>
+            <li>
               <Link
                 href="/about"
                 className="hover:text-teal-200 transition-colors duration-300"
               >
                 About Us
               </Link>
-            </motion.li>
-            <motion.li
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-            >
+            </li>
+            <li>
               <Link
                 href="/contact"
                 className="hover:text-teal-200 transition-colors duration-300"
               >
                 Contact
               </Link>
-            </motion.li>
-          </motion.ul>
+            </li>
+          </ul>
 
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
+          {/* Sign In/User Button */}
+          <div>
             <AnimatePresence>
               <SignedOut>
                 <motion.div
@@ -100,7 +101,7 @@ export default function Navbar() {
                   transition={{ duration: 0.3 }}
                 >
                   <SignInButton>
-                    <button className="bg-blue-500 px-3 py-2 rounded-md">
+                    <button className="bg-green-600 px-3 py-2 rounded-md">
                       Sign In
                     </button>
                   </SignInButton>
@@ -110,9 +111,9 @@ export default function Navbar() {
             <SignedIn>
               <UserButton />
             </SignedIn>
-          </motion.div>
+          </div>
         </div>
-      </motion.nav>
+      </nav>
     </>
   );
 }
