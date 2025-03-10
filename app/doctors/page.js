@@ -1,13 +1,18 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '../components/ui/card';
+import { Button } from '../components/ui/button';
+import { Search, MapPin, Phone, Award, Clock, CreditCard } from 'lucide-react';
 
 export default function DoctorsPage() {
   const [doctors, setDoctors] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredDoctors, setFilteredDoctors] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    setIsLoading(true);
     fetch('/api/doctors')
       .then((res) => res.json())
       .then((data) => {
@@ -17,6 +22,9 @@ export default function DoctorsPage() {
         } else {
           console.error('Error fetching doctors:', data.error);
         }
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }, []);
 
@@ -49,68 +57,130 @@ export default function DoctorsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 py-10 px-4 mt-16">
-      <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-xl p-8">
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={searchBarVariants}
-          transition={{ duration: 0.5 }}
-          className="mb-8"
-        >
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Search doctors by name, specialization, or qualification..."
-              value={searchTerm}
-              onChange={handleSearch}
-              className="w-full pl-12 pr-4 py-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow shadow-md"
-            />
-            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-            </div>
-          </div>
-        </motion.div>
+    <div className="container px-4 py-16 md:py-24">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="text-center mb-12"
+      >
+        <h1 className="text-4xl font-bold tracking-tight mb-4 md:text-5xl">Find Doctors</h1>
+        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          Search for specialists, view their qualifications, and book appointments with ease.
+        </p>
+      </motion.div>
 
+      <motion.div
+        initial="hidden"
+        animate="visible"
+        variants={searchBarVariants}
+        transition={{ duration: 0.5 }}
+        className="max-w-3xl mx-auto mb-12"
+      >
+        <div className="relative">
+          <input
+            type="text"
+            placeholder="Search doctors by name, specialization, or qualification..."
+            value={searchTerm}
+            onChange={handleSearch}
+            className="w-full pl-12 pr-4 py-4 border rounded-full bg-background focus:outline-none focus:ring-2 focus:ring-primary/50 transition-shadow shadow-md"
+          />
+          <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+            <Search className="h-6 w-6 text-muted-foreground" />
+          </div>
+        </div>
+      </motion.div>
+
+      {isLoading ? (
+        <div className="flex justify-center items-center py-20">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+        </div>
+      ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <AnimatePresence>
-            {filteredDoctors && filteredDoctors.map((doctor) => (
+            {filteredDoctors && filteredDoctors.length > 0 ? (
+              filteredDoctors.map((doctor) => (
+                <motion.div
+                  key={doctor._id}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  variants={doctorVariants}
+                  transition={{ duration: 0.3 }}
+                >
+                  <Card className="h-full flex flex-col">
+                    <CardHeader>
+                      <CardTitle>{doctor.Name}</CardTitle>
+                      <CardDescription>{doctor.Specialization}</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4 flex-grow">
+                      <div className="flex items-start space-x-3">
+                        <Award className="h-5 w-5 text-primary mt-0.5" />
+                        <div>
+                          <h3 className="font-medium">Qualification</h3>
+                          <p className="text-muted-foreground">{doctor.Qualification}</p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-start space-x-3">
+                        <MapPin className="h-5 w-5 text-primary mt-0.5" />
+                        <div>
+                          <h3 className="font-medium">Location</h3>
+                          <p className="text-muted-foreground">{doctor.Location}</p>
+                          <a 
+                            href={doctor.Location_Link} 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            className="text-primary hover:underline flex items-center mt-1"
+                          >
+                            <MapPin className="h-4 w-4 mr-1" />
+                            <span>View on Map</span>
+                          </a>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-start space-x-3">
+                        <Clock className="h-5 w-5 text-primary mt-0.5" />
+                        <div>
+                          <h3 className="font-medium">Availability</h3>
+                          <p className="text-muted-foreground">{doctor.Availability || 'N/A'}</p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-start space-x-3">
+                        <Phone className="h-5 w-5 text-primary mt-0.5" />
+                        <div>
+                          <h3 className="font-medium">Contact</h3>
+                          <p className="text-muted-foreground">{doctor.Contact}</p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-start space-x-3">
+                        <CreditCard className="h-5 w-5 text-primary mt-0.5" />
+                        <div>
+                          <h3 className="font-medium">Consultation Fee</h3>
+                          <p className="text-muted-foreground">₹{doctor.Consultation_Fee}</p>
+                        </div>
+                      </div>
+                    </CardContent>
+                    <CardFooter>
+                      <Button className="w-full">Book Appointment</Button>
+                    </CardFooter>
+                  </Card>
+                </motion.div>
+              ))
+            ) : (
               <motion.div
-                key={doctor._id}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-                variants={doctorVariants}
-                transition={{ duration: 0.3 }}
-                className="bg-white rounded-lg shadow-md p-6 border border-gray-200 hover:shadow-lg transition-shadow duration-300"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="col-span-full text-center py-12"
               >
-                <h2 className="text-xl font-semibold text-gray-800 mb-3">{doctor.Name}</h2>
-                <p className="text-gray-600 mb-2"><strong>Specialization:</strong> {doctor.Specialization}</p>
-                <p className="text-gray-600 mb-2"><strong>Qualification:</strong> {doctor.Qualification}</p>
-                <p className="text-gray-600 mb-2"><strong>Location:</strong> {doctor.Location}</p>
-                <p className="text-gray-600 mb-2">
-                  <strong>Google Map Location Link:</strong>{' '}
-                  <a href={doctor.Location_Link} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                    Map
-                  </a>
-                </p>
-                <p className="text-gray-600 mb-2"><strong>Availability:</strong> {doctor.Availability || 'N/A'}</p>
-                <p className="text-gray-600 mb-2"><strong>Contact:</strong> {doctor.Contact}</p>
-                <p className="text-gray-600 mb-4"><strong>Fee:</strong> ₹{doctor.Consultation_Fee}</p>
-                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300">
-                  Book Appointment
-                </button>
+                <p className="text-xl text-muted-foreground">No doctors found matching your search criteria.</p>
               </motion.div>
-            ))}
+            )}
           </AnimatePresence>
         </div>
-      </div>
+      )}
     </div>
   );
 }

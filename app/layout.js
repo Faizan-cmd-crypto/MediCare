@@ -1,8 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
-import {
-  ClerkProvider,
-} from '@clerk/nextjs'
+import { ClerkProvider } from '@clerk/nextjs'
+import { ThemeProvider } from "./components/theme-provider";
 import "./globals.css";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -18,25 +17,33 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "MediCare - Easy Access To All",
-  description: "MediCare is an Online Platform Easily Accessible to the Massess of Kashmir helping them provide an Easy Accurate Access to the diffrent Renowed Clinicians/Clinics.You can Search for Doctors, Locations of their Clinics, Charges and you can easily Book Appointments Online",
+  title: "MediVitals - Advanced Healthcare Platform",
+  description: "MediVitals is your comprehensive healthcare platform, providing seamless access to qualified doctors, easy appointment scheduling, and secure medical records management. Experience modern healthcare at your fingertips.",
+  icons: {
+    icon: '/favicon.svg',
+  },
 };
 
 export default function RootLayout({ children }) {
   return (
     <ClerkProvider>
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-         <header className="flex justify-end items-center p-4 gap-4 h-16">
-          </header>
-        <Navbar/>
-        {children}
-        <Analytics />
-        <Footer/>
-      </body>
-    </html>
+      <html lang="en" suppressHydrationWarning>
+        <body className={`${geistSans.variable} ${geistMono.variable} min-h-screen bg-background font-sans antialiased`}>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <div className="relative flex min-h-screen flex-col">
+              <Navbar />
+              <main className="flex-1">{children}</main>
+              <Footer />
+            </div>
+            <Analytics />
+          </ThemeProvider>
+        </body>
+      </html>
     </ClerkProvider>
   );
 }

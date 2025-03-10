@@ -2,6 +2,9 @@
 import Head from 'next/head';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { Card, CardHeader, CardContent, CardTitle, CardDescription } from '../components/ui/card';
+import { Button } from '../components/ui/button';
+import { Mail, MapPin, Phone } from 'lucide-react';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -17,6 +20,7 @@ const Contact = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(formData);
+    // Form submission logic here
   };
 
   const fadeInUp = {
@@ -39,115 +43,143 @@ const Contact = () => {
       <Head>
         <title>Contact Us | MediCare</title>
       </Head>
-      <main className="mt-20 container mx-auto p-4">
-        <div className="max-w-7xl mx-auto">
-          <motion.h1
-            initial="hidden"
-            animate="visible"
-            variants={fadeInUp}
-            transition={{ duration: 0.5 }}
-            className="text-3xl font-bold mb-4 text-center"
-          >
-            Contact Us
-          </motion.h1>
+      
+      <div className="container px-4 py-16 md:py-24">
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={fadeInUp}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-12"
+        >
+          <h1 className="text-4xl font-bold tracking-tight mb-4 md:text-5xl">Contact Us</h1>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Get in touch with our team for any inquiries, support, or feedback. We're here to help!
+          </p>
+        </motion.div>
 
-          <motion.p
-            initial="hidden"
-            animate="visible"
-            variants={fadeInUp}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-lg mb-6 text-center"
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={slideInFromLeft}
+          transition={{ duration: 0.5, delay: 0.4 }}
+          className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto"
+        >
+          <motion.div
+            variants={scaleUp}
+            transition={{ duration: 0.5, delay: 0.6 }}
           >
-            Get in touch with us for any inquiries or assistance.
-          </motion.p>
+            <Card>
+              <CardHeader>
+                <CardTitle>Send us a message</CardTitle>
+                <CardDescription>
+                  Fill out the form below and we'll get back to you as soon as possible.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div className="space-y-2">
+                    <label htmlFor="name" className="text-sm font-medium">
+                      Name
+                    </label>
+                    <input
+                      type="text"
+                      id="name"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      className="w-full p-3 border rounded-md bg-background"
+                      required
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label htmlFor="email" className="text-sm font-medium">
+                      Email
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      className="w-full p-3 border rounded-md bg-background"
+                      required
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label htmlFor="message" className="text-sm font-medium">
+                      Message
+                    </label>
+                    <textarea
+                      id="message"
+                      name="message"
+                      value={formData.message}
+                      onChange={handleChange}
+                      rows={5}
+                      className="w-full p-3 border rounded-md bg-background"
+                      required
+                    ></textarea>
+                  </div>
+
+                  <Button type="submit" className="w-full">
+                    Send Message
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
+          </motion.div>
 
           <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={slideInFromLeft}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            className="flex flex-col md:flex-row justify-center items-center w-full"
+            variants={scaleUp}
+            transition={{ duration: 0.5, delay: 0.8 }}
           >
-            <motion.div
-              variants={scaleUp}
-              transition={{ duration: 0.5, delay: 0.6 }}
-              className="w-full md:w-1/2 lg:w-2/5 p-6 bg-white rounded-lg shadow-md"
-            >
-              <form onSubmit={handleSubmit}>
-                <div className="mb-4">
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    className="mt-1 p-2 w-full border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                    required
-                  />
+            <Card>
+              <CardHeader>
+                <CardTitle>Contact Information</CardTitle>
+                <CardDescription>
+                  Find us using the information below or reach out directly.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="flex items-start space-x-3">
+                  <Mail className="h-5 w-5 text-primary mt-0.5" />
+                  <div>
+                    <h3 className="font-medium">Email</h3>
+                    <p className="text-muted-foreground">faizanahmad1127@gmail.com</p>
+                  </div>
                 </div>
-
-                <div className="mb-4">
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="mt-1 p-2 w-full border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                    required
-                  />
+                
+                <div className="flex items-start space-x-3">
+                  <MapPin className="h-5 w-5 text-primary mt-0.5" />
+                  <div>
+                    <h3 className="font-medium">Location</h3>
+                    <p className="text-muted-foreground">University of Kashmir, IOT Zakura Campus</p>
+                  </div>
                 </div>
-
-                <div className="mb-4">
-                  <label htmlFor="message" className="block text-sm font-medium text-gray-700">
-                    Message
-                  </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    value={formData.message}
-                    onChange={handleChange}
-                    rows={4}
-                    className="mt-1 p-2 w-full border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                    required
-                  ></textarea>
+                
+                <div className="flex items-start space-x-3">
+                  <Phone className="h-5 w-5 text-primary mt-0.5" />
+                  <div>
+                    <h3 className="font-medium">Phone</h3>
+                    <p className="text-muted-foreground">+91 9149569054</p>
+                  </div>
                 </div>
-
-                <button
-                  type="submit"
-                  className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-md"
-                >
-                  Submit
-                </button>
-              </form>
-            </motion.div>
-
-            <motion.div
-              variants={scaleUp}
-              transition={{ duration: 0.5, delay: 0.8 }}
-              className="w-full md:w-1/2 lg:w-2/5 p-6 md:ml-4 bg-gray-100 rounded-lg shadow-md mt-4 md:mt-0"
-            >
-              <motion.h2
-                variants={fadeInUp}
-                transition={{ duration: 0.5, delay: 1 }}
-                className="text-xl font-bold mb-4"
-              >
-                Contact Information
-              </motion.h2>
-              <p>
-                <span className="font-bold">Email:</span> faizanahmad1127@gmail.com
-              </p>
-              <p>University of Kashmir, IOT Zakura Campus</p>
-            </motion.div>
+                
+                <div className="pt-4">
+                  <h3 className="font-medium mb-3">Office Hours</h3>
+                  <ul className="space-y-2 text-muted-foreground">
+                    <li>Monday - Friday: 9:00 AM - 5:00 PM</li>
+                    <li>Saturday: 10:00 AM - 2:00 PM</li>
+                    <li>Sunday: Closed</li>
+                  </ul>
+                </div>
+              </CardContent>
+            </Card>
           </motion.div>
-        </div>
-      </main>
+        </motion.div>
+      </div>
     </>
   );
 };
